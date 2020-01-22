@@ -1,25 +1,48 @@
-from kivy.app import App
-from kivy.core.window import Window
-
 from firestarter.game_engine.engine import Engine
-from firestarter.game_engine.sprite import Player
+from firestarter.game_engine.sprite import PickUpCoin, Platform, Player
+
+from kivy.app import App
+from kivy.clock import Clock
+from kivy.core.window import Window
 
 
 class MyGame(Engine):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.player = Player('Bob-01.jpg', (50, 50))
+        self.player = Player(self.assets['spritesheet_caveman'], (50, 90))
+        self.platform_01 = Platform(self.assets['Untitled'], (50, 20))
+        self.platform_01.change_mode(3)
+        self.platform_02 = Platform(self.assets['Untitled'], (50 + 60, 20))
+        self.platform_02.change_mode(3)
+        self.platform_03 = Platform(self.assets['Untitled'], (50 + 60 * 2, 20))
+        self.platform_03.change_mode(3)
+        self.platform_04 = Platform(self.assets['Untitled'], (50 + 60 * 3, 20))
+        self.platform_04.change_mode(3)
+        self.platform_05 = Platform(self.assets['Untitled'], (50 + 60 * 4, 20))
+        self.platform_05.change_mode(3)
 
-        self.add_sprite(self.player)
+        self.coin = PickUpCoin(self.assets['Untitled'], (60 + 32 * 5, 80 + 40))
+        self.coin.change_mode(2)
+
+        self.add_sprites(
+            [self.player,
+             self.coin,
+             self.platform_01, self.platform_02,
+             self.platform_03, self.platform_04,
+             self.platform_05
+             ]
+        )
+
+        Clock.schedule_interval(lambda dt: self.player.change_mode(self.player.current_mode + 1), 1)
 
     def update(self, dt: float) -> None:
-        if 'spacebar' in self.pressed_keys:
-            self.player.vel_y = 25
+        if 'spacebar' in self.pressed_keys and self.player.is_standing:
+            self.player.acc_y = 15
 
         if 'a' in self.pressed_keys:
-            self.player.vel_x = -10
+            self.player.vel_x = -7.5
         if 'd' in self.pressed_keys:
-            self.player.vel_x = 10
+            self.player.vel_x = 7.5
 
 
 class Application(App):
