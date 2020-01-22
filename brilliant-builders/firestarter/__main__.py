@@ -9,7 +9,7 @@ from kivy.core.window import Window
 class MyGame(Engine):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.player = Player(self.assets['spritesheet_caveman'], (50, 90))
+        self.player = Player(self.assets['player'], (50, 90))
         self.platform_01 = Platform(self.assets['Untitled'], (50, 20))
         self.platform_01.change_mode(3)
         self.platform_02 = Platform(self.assets['Untitled'], (50 + 60, 20))
